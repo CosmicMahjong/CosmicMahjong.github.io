@@ -753,18 +753,18 @@ Majiang.Game.prototype.pingju = function(name) {
         this._view.shoupai[this._lunban].open();
         shoupai[this._lunban] = this._model.shoupai[this._lunban].toString();
     }
-    else if (name == '四家立直') {
+    /*else if (name == '四家立直') {
         for (var l = 0; l < 4; l++) {
             this._view.shoupai[l].open();
             shoupai[l] = this._model.shoupai[l].toString();
         }
-    }
-    else if (name == '三家和') {
+    }*/
+    /*else if (name == '三家和') {
         for (var l of this._hule) {
             this._view.shoupai[l].open();
             shoupai[l] = this._model.shoupai[l].toString();
         }
-    }
+    }*/
  
     this._view.jiesuan.pingju({name: name, fenpei: fenpei});
  

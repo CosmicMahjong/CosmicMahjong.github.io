@@ -167,3 +167,41 @@ body {
 .jiesuan .fenpei .minus {
     color: red;
 }
+
+table.tclass1 {
+    border-collapse: collapse;
+    text-align: center;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+table.tclass1 thead {
+    border-right: 1px solid  #ccc;
+    border-left: 1px solid #ccc;
+    background: #04162e;
+}
+table.tclass1 thead th {
+/*    padding: 10px;*/
+    font-weight: bold;
+    vertical-align: center;
+    color: #fff;
+}
+table.tclass1 tbody th{
+/*    width: 150px;
+    padding: 10px;*/
+    font-weight: bold;
+    vertical-align: center;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    background: #efefef;
+}
+table.tclass td {
+    /*width: 350px;
+    padding: 10px;*/
+    vertical-align: center;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+table.tclass td.tdleft {
+    text-align: left;
+}
