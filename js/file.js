@@ -31,9 +31,9 @@ Majiang.PaipuFile = function(storage) {
 
     this._paipu = [];
 
-    if (storage && localStorage) {
-        if (localStorage.getItem(storage)) {
-            this._paipu = fix_paipu(JSON.parse(localStorage.getItem(storage)));
+    if (storage && window.localStorage) {
+        if (windows.localStorage.getItem(storage)) {
+            this._paipu = fix_paipu(JSON.parse(window.localStorage.getItem(storage)));
         }
         this._storage = storage;
     }
@@ -51,7 +51,7 @@ Majiang.PaipuFile.prototype.stringify = function(idx) {
 Majiang.PaipuFile.prototype.add_paipu = function(paipu) {
     this._paipu = this._paipu.concat(fix_paipu(paipu));
     if (this._storage) {
-        localStorage.setItem(this._storage, this.stringify())
+        window.localStorage.setItem(this._storage, this.stringify())
     }
 }
 
@@ -62,7 +62,7 @@ Majiang.PaipuFile.prototype.get_paipu = function(idx) {
 Majiang.PaipuFile.prototype.del_paipu = function(idx) {
     this._paipu.splice(idx, 1);
     if (this._storage) {
-        localStorage.setItem(this._storage, this.stringify())
+        window.localStorage.setItem(this._storage, this.stringify())
     }
 }
 

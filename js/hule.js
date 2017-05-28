@@ -3,15 +3,22 @@
  */
 
 (function(){
-
-function getMianziMPS2(color, bingpai, n, k) {
+/**
+ * nを基準に1つずつ数字を勧めながら面子分解を行う。k=0で呼び出してください。
+ * Usage: const mianziMPS=GetMianziMPS2('s', bingpai, 2, 0);
+ * @param {*'m','p','s'} color 
+ * @param {*} bingpai 
+ * @param {*1,2,3} n 
+ * @param {*0} k 
+ */
+function getMianziMPS(color, bingpai, n, k) {
     if (k > 9) return [[]];
     const N=(n+k-1)%9+1, N_p1=(n+k)%9+1, N_p2=(n+k+1)%9+1;
-    if (bingpai[N] == 0) return getMianziMPS2(color, bingpai, n, k+1);    
+    if (bingpai[N] == 0) return getMianziMPS(color, bingpai, n, k+1);    
     let shunzi = [];
     if (bingpai[N] > 0 && bingpai[N_p1] > 0 && bingpai[N_p2] > 0) {
         bingpai[N]--; bingpai[N_p1]--; bingpai[N_p2]--;
-        shunzi = getMianziMPS2(color, bingpai, n, k);
+        shunzi = getMianziMPS(color, bingpai, n, k);
         bingpai[N]++; bingpai[N_p1]++; bingpai[N_p2]++;
         for (let s_mianzi of shunzi) {
             s_mianzi.unshift(color+(N)+(N_p1)+(N_p2));
@@ -20,7 +27,7 @@ function getMianziMPS2(color, bingpai, n, k) {
     let kezi = [];
     if (bingpai[N] >= 3) {
         bingpai[N] -= 3;
-        kezi = getMianziMPS2(color, bingpai, n, k);
+        kezi = getMianziMPS(color, bingpai, n, k);
         bingpai[N] += 3;
         for (let k_mianzi of kezi) {
             k_mianzi.unshift(color+N+N+N);
@@ -29,47 +36,61 @@ function getMianziMPS2(color, bingpai, n, k) {
     return shunzi.concat(kezi);
 }
 
-function getMianziMPS(color, bingpai, n) {
-    if (n > 9) return [[]];
-    
-    if (bingpai[n] == 0) return getMianziMPS(color, bingpai, n+1);
-    
-    let shunzi = [];
-    if (n <= 7 && bingpai[n] > 0 && bingpai[n+1] > 0 && bingpai[n+2] > 0) {
-        bingpai[n]--; bingpai[n+1]--; bingpai[n+2]--;
-        shunzi = getMianziMPS(color, bingpai, n);
-        bingpai[n]++; bingpai[n+1]++; bingpai[n+2]++;
-        for (let s_mianzi of shunzi) {
-            s_mianzi.unshift(color+(n)+(n+1)+(n+2));
-        }
-    } else if(bingpai[8]>0 && bingpai[9]>0 && bingpai[1]>0 ){
-        bingpai[8]--; bingpai[9]--; bingpai[1]--;
-        shunzi = getMianziMPS(color, bingpai, 8);
-        bingpai[8]++; bingpai[9]++; bingpai[1]++;
+// 風牌の面子分解
+function getMianziZ2(bingpaiZ,n,k){
+    if(k>7){
+	 return [[]];
+    }
+    const N=(n+k-1)%7+1, N_p1=(n+k)%7+1, N_p2=(n+k+1)%7+1;
+    if( bingpaiZ[N]==0 || (
+               N==3 && (bingpaiZ[4]==0||bingpaiZ[1]==0)  
+            || N==4 && (bingpaiZ[1]==0||bingpaiZ[2]==0)
+            || N!=3 && N!=4 && (bingpaiZ[N_p1]===0||bingpaiZ[N_p2]==0)) ){
+            //Nを基準に面子を作れない場合はN+1に移動
+            return getMianziZ2(bingpaiZ, n, k+1);
+    }
+    let shunzi=[];
+    if((N<=2)&& bingpaiZ[N]>0&&bingpaiZ[N_p1]>0&&bingpaiZ[N_p2]>0){
+        bingpaiZ[N]--; bingpaiZ[N_p1]--; bingpaiZ[N_p2]--;
+        shunzi = getMianziZ2(bingpaiZ,n,k);
+        bingpaiZ[N]++; bingpaiZ[N_p1]++; bingpaiZ[N_p2]++;
         for(let s_mianzi of shunzi){
-            s_mianzi.unshift(color+"891");
+            s_mianzi.unshift('z'+(N)+(N_p1)+(N_p2));
         }
-    } else if(bingpai[9]>0 && bingpai[1]>0 && bingpai[2]>0 ){
-        bingpai[9]--; bingpai[1]--; bingpai[2]--;
-        shunzi = getMianziMPS(color, bingpai, 9);
-        bingpai[9]++; bingpai[1]++; bingpai[2]++;
+    }else if(N==3 && bingpaiZ[3]>0&&bingpaiZ[4]>0&&bingpaiZ[1]>0){
+        bingpaiZ[3]--; bingpaiZ[4]--; bingpaiZ[1]--;
+        shunzi = getMianziZ2(bingpaiZ,n,k);
+        bingpaiZ[3]++; bingpaiZ[4]++; bingpaiZ[1]++;
         for(let s_mianzi of shunzi){
-            s_mianzi.unshift(color+"912");
+            s_mianzi.unshift('z341');
+        }
+    }else if(N==4 && bingpaiZ[4]>0&&bingpaiZ[1]>0&&bingpaiZ[2]>0){
+        bingpaiZ[4]--; bingpaiZ[1]--; bingpaiZ[2]--;
+        shunzi = getMianziZ2(bingpaiZ,n,k);
+        bingpaiZ[4]++; bingpaiZ[1]++; bingpaiZ[2]++;
+        for(let s_mianzi of shunzi){
+            s_mianzi.unshift('z412');
+        }
+    }else if(5<=N && bingpaiZ[5]>0 && bingpaiZ[6]>0 && bingpaiZ[7]>0){
+        bingpaiZ[5]--; bingpaiZ[6]--; bingpaiZ[7]--;
+        shunzi = getMianziZ2(bingpaiZ,n,k);
+        bingpaiZ[5]++; bingpaiZ[6]++; bingpaiZ[7]++;
+        for(let s_mianzi of shunzi){
+            s_mianzi.unshift('z567');
         }
     }
-
-    let kezi = [];
-    if (bingpai[n] >= 3) {
-        bingpai[n] -= 3;
-        kezi = getMianziMPS(color, bingpai, n);
-        bingpai[n] += 3;
-        for (let k_mianzi of kezi) {
-            k_mianzi.unshift(color+n+n+n);
+    let kezi=[];   
+    if(bingpaiZ[N]>=3){
+        bingpaiZ[N]-=3;
+        kezi=getMianziZ2(bingpaiZ, n, k);
+        bingpaiZ[N]+=3;
+        for(let k_mianzi of kezi){
+            k_mianzi.unshift('z'+N+N+N);
         }
     }
-    
     return shunzi.concat(kezi);
 }
+
 
 function getMianziZ(bingpai, n){
     if(n>7) return [[]];
@@ -119,16 +140,17 @@ function getMianziZ(bingpai, n){
 
 function getMianziAll(shoupai) {
     let mianzi_MPSZ = [[]];
-    for (var s of ['m','p','s','z']) { // m/s/p/zの面子分解
-        let new_mianzi = [];
+    for (const s of ['m','p','s','z']) { // m/s/p/zの面子分解
+        var new_mianzi = [];
         for(let i=1;i<=3;i++){
             const sub_mianzi = 
-               ('z'==s? getMianziZ(shoupai._bingpai['z'],i): getMianziMPS2(s, shoupai._bingpai[s], i,0));
+               ('z'==s? getMianziZ2(shoupai._bingpai['z'],i,0) : getMianziMPS(s, shoupai._bingpai[s], i,0));
             for (const mm of mianzi_MPSZ) {
                 for (const nn of sub_mianzi) {
                     new_mianzi.push( mm.concat(nn) );
                 }
             }
+            if(s=='z') console.dir(sub_mianzi);
         }
         mianzi_MPSZ = new_mianzi;
     }
@@ -141,7 +163,6 @@ function getMianziAll(shoupai) {
     for(const mm of mianzi_MPSZ){
         mianzi_all.push( mm.concat(MIANZI_fulow) );
     }
-    //console.dir(mianzi_all);
 
     return mianzi_all;
 }
@@ -176,13 +197,11 @@ function hule_mianzi_yiban(shoupai, hulepai) {
         var bingpai = shoupai._bingpai[s]; // bingpaiはs色の手牌, bingpai={0:0, 1:0, ..., 9:2};数字に対する手持ちの数の連想配列
         for (var n = 1; n < bingpai.length; n++) { // 1～9まで(字牌は1～7まで)ループ
             //console.log("hule_mianzi_yiban():"+s+n+','+bingpai[n]);
-            if (bingpai[n] < 2){
-                continue; //雀頭探し
-            }
+            if (bingpai[n] < 2) continue; //雀頭探し
             bingpai[n] -= 2; // 雀頭だけ抜く
             var jiangpai = s+n+n; // 雀頭=jaingpai;
             for (var mm of getMianziAll(shoupai)) {
-                if(mm.length!=4) continue; //4面子なかったら、次の和了形に
+                if(mm.length!=4) continue; //4面子なかったら、次の和了形分解に
                 mm.unshift(jiangpai); // 雀頭をmmにくっつける
                 hule_mianzi = hule_mianzi.concat(add_hulepai(mm, hulepai)); //和了牌の処理
             }
