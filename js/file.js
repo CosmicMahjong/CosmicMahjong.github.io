@@ -32,7 +32,7 @@ Majiang.PaipuFile = function(storage) {
     this._paipu = [];
 
     if (storage && window.localStorage) {
-        if (windows.localStorage.getItem(storage)) {
+        if (window.localStorage.getItem(storage)) {
             this._paipu = fix_paipu(JSON.parse(window.localStorage.getItem(storage)));
         }
         this._storage = storage;
