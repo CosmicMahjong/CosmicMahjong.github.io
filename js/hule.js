@@ -14,7 +14,7 @@
 function getMianziMPS(color, bingpai, n, k) {
     if (k > 9) return [[]];
     const N=(n+k-1)%9+1, N_p1=(n+k)%9+1, N_p2=(n+k+1)%9+1;
-    if (bingpai[N] == 0) return getMianziMPS(color, bingpai, n, k+1);    
+    if ( (bingpai[N]==0||bingpai[N_p1]==0||bingpai[N_p2]==0)&&bingpai[N]<3 ) return getMianziMPS(color, bingpai, n, k+1);    
     let shunzi = [];
     if (bingpai[N] > 0 && bingpai[N_p1] > 0 && bingpai[N_p2] > 0) {
         bingpai[N]--; bingpai[N_p1]--; bingpai[N_p2]--;
